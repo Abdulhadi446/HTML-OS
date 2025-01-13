@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Command Line</title>
+    <style>
+        body {
+            background-color: black;
+            color: green;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+        }
+
+        #terminal {
+            padding: 10px;
+            height: 100%;
+            overflow-y: auto; /* Allow vertical scrolling */
+        }
+
+        #output {
+            white-space: pre-wrap; /* Preserve whitespace */
+        }
+
+        #input {
+            border: none;
+            background: black;
+            color: green;
+            outline: none;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="terminal">
+        <div id="output"></div>
+        <input type="text" id="input" autofocus />
+    </div>
+    <script>
+        const inputField = document.getElementById("input");
+        const outputDiv = document.getElementById("output");
+
+        inputField.addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                const command = inputField.value;
+                processCommand(command);
+                inputField.value = ""; // Clear input field
+            }
+        });
+
+        function processCommand(command) {
+            let response;
+
+            switch (command.toLowerCase()) {
+                case "help":
+                    response = "Available commands: help, clear, date";
+                    break;
+                case "clear":
+                    outputDiv.innerHTML = ""; // Clear the output
+                    return;
+                case "date":
+                    response = new Date().toString();
+                    break;
+                default:
+                    try {
+                        response = eval(command); // Try to run the input as JavaScript
+                    } catch (error) {
+                        response = "Error: " + error.message;
+                    }
+            }
+
+            outputDiv.innerHTML += `> ${command}\n${response}\n`;
+            outputDiv.scrollTop = outputDiv.scrollHeight; // Scroll to bottom
+        }
+    </script>
+</body>
+</html>

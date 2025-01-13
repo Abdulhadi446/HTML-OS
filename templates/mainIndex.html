@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML OS</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0078d7;
+      color: white;
+    }
+  
+    #desktop {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      overflow: hidden; /* Ensure no overflow */
+    }
+  
+    .desktop-icons {
+      display: flex; /* Align icons in a row */
+      flex-wrap: wrap; /* Allow wrapping if necessary */
+      gap: 15px; /* Reduce the gap between icons */
+      margin-top: 40px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0; /* Ensure the icons stay within the visible area */
+      padding: 10px;
+      box-sizing: border-box; /* Prevent overflow */
+      overflow: auto; /* Allow scrolling if necessary */
+    }
+  
+    .desktop-icons a {
+      display: inline-block; /* Ensure proper spacing for the links */
+      width: 60px; /* Limit width of the <a> tags */
+      height: 60px; /* Limit height of the <a> tags */
+      flex-shrink: 0; /* Prevent shrinking of icons */
+    }
+  
+    /* app-maker-HTML */
+    .desktop-icons #app-maker-HTML {
+      display: inline-flex; /* Ensures this icon is treated like the others */
+      align-items: center; /* Vertically centers the content */
+      justify-content: center; /* Ensures the icon is centered horizontally */
+      width: 120px; /* Limit width of the <a> tag */
+      height: 120px; /* Limit height of the <a> tag */
+      flex-shrink: 0; /* Prevent shrinking */
+      margin-top: -30px; /* Lift this icon above the others */
+    }
+  
+    .icon {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+      transition: transform 0.2s;
+    }
+  
+    .icon:hover {
+      transform: scale(1.1);
+    }
+  
+    @media (max-width: 600px) {
+      .icon {
+        width: 40px;
+        height: 40px;
+      }
+    }
+  
+    /* Window style */
+    .window {
+      background-color: #fff;
+      border-radius: 8px;
+      border: 2px solid #333;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      width: 300px;
+      height: 300px;
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      top: 50px;
+      left: 50px;
+      box-sizing: border-box;
+      display: none; /* Hide initially */
+    }
+  
+    /* Window header style */
+    .window-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      background-color: #0078d7;
+      color: white;
+      padding: 5px;
+      text-align: center;
+      border-radius: 5px 5px 0 0;
+      cursor: move;
+    }
+  
+    .window-header span {
+      flex-grow: 1;
+      text-align: center;
+    }
+  
+    /* Window buttons style */
+    .window-buttons {
+      display: flex;
+      justify-content: flex-end;
+      width: auto;
+    }
+  
+    .window-buttons button {
+      width: 30px;
+      height: 30px;
+      font-size: 16px;
+      color: white;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: center;
+      margin-left: 5px; /* Add a smaller gap between buttons */
+    }
+  
+    .window-buttons button:hover {
+      background-color: #0078d7;
+    }
+  
+    /* Minimize, Maximize, Close button colors */
+    .window-buttons .minimize {
+      border-radius: 30%;
+      background-color: #f1c40f;
+    }
+  
+    .window-buttons .maximize {
+      border-radius: 30%;
+      background-color: #2ecc71;
+    }
+  
+    .window-buttons .close {
+      border-radius: 30%;
+      background-color: #e74c3c;
+    }
+  
+    /* Resize handle style */
+    .resize-handle {
+      width: 10px;
+      height: 10px;
+      background-color: #ccc;
+      cursor: se-resize;
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      border-radius: 2px;
+    }
+  
+    iframe {
+      width: 100%;
+      height: 80%;
+      border: none;
+      border-radius: 5px;
+    }
+  </style>
+    
+</head>
+<body>
+  <div id="desktop">
+    <div class="desktop-icons">
+      <a href="#" class="open-window" data-window="paint-window">
+        <img src="https://windowshtml.netlify.app/images/paint.png"  class="icon"  alt="Paint Icon">
+      </a>
+
+      <a href="#" class="open-window" data-window="notepad-window">
+        <img src="https://windowshtml.netlify.app/images/notepad.jfif" class="icon" alt="Notepad Icon">
+      </a>
+
+      <a href="#" class="open-window" data-window="calculator-window">
+        <img src="https://windowshtml.netlify.app/images/calculator.png" class="icon" alt="Calculator Icon">
+      </a>
+
+      <a href="#" class="open-window" data-window="edge-window">
+        <img src="https://windowshtml.netlify.app/images/edgeicon.png" class="icon" alt="Edge Icon">
+      </a>
+
+      <a href="#" class="open-window" data-window="video-window">
+        <img src="https://windowshtml.netlify.app/images/videoplayer.png" class="icon" alt="Video Icon">
+      </a>
+
+      <a href="#" class="open-window" data-window="vscode-window">
+        <img src="https://windowshtml.netlify.app/images/vscode.jfif" class="icon" alt="VS_Code Icon">
+      </a>
+
+      <a href="#" class="open-window" data-window="cmd-window">
+        <img src="https://windowshtml.netlify.app/images/cmd.png" class="icon" alt="Cmd Icon">
+      </a>
+
+      <a href="#" class="open-window" id="scratch" data-window="scratch-window">
+        <img src="https://i.ibb.co/1TcZBDN/scrat-removebg-preview.png" class="icon" alt="scratch Icon">
+      </a>
+      
+      <a href="#" class="open-window" id="app-maker" data-window="AppMaker-window">
+      <img src="https://i.ibb.co/WFN4SFb/py.jpg" class="icon" alt="App maker Icon">
+      </a>
+
+      <a href="#" class="open-window" id="your-app" data-window="YourApp-window">
+        <img src="https://i.ibb.co/Dksc62Q/download.jpg" class="icon" alt="your app Icon">
+      </a>
+
+      <a href="#" class="open-window" id="app-maker-HTML" data-window="AppMaker-html-window">
+        <img src="https://i.ibb.co/2K2WzL6/images-removebg-preview.png" class="icon" alt="App maker Icon">
+      </a>
+  </div>
+</div>
+
+    <!-- Window for Paint -->
+    <div class="window" id="paint-window">
+      <div class="window-header">
+        <span>Paint</span>
+        <div class="window-buttons">
+          <button class="minimize">―</button>
+          <button class="maximize">[]</button>
+          <button class="close">X</button>
+        </div>
+      </div>
+      <iframe src="paint"></iframe> 
+      <div class="resize-handle"></div>
+    </div>
+
+    <!-- Window for Notepad -->
+    <div class="window" id="notepad-window">
+      <div class="window-header">
+        <span>Notepad</span>
+        <div class="window-buttons">
+          <button class="minimize">―</button>
+          <button class="maximize">[]</button>
+          <button class="close">X</button>
+        </div>
+      </div>
+      <iframe src="notepad"></iframe>
+      <div class="resize-handle"></div>
+    </div>
+
+    <!-- Window for Calculator -->
+    <div class="window" id="calculator-window">
+      <div class="window-header">
+        <span>Calculator</span>
+        <div class="window-buttons">
+          <button class="minimize">―</button>
+          <button class="maximize">[]</button>
+          <button class="close">X</button>
+        </div>
+      </div>
+      <iframe src="calculator"></iframe>
+      <div class="resize-handle"></div>
+    </div>
+
+    <!-- Window for Edge -->
+    <div class="window" id="edge-window">
+      <div class="window-header">
+        <span>Edge</span>
+        <div class="window-buttons">
+          <button class="minimize">―</button>
+          <button class="maximize">[]</button>
+          <button class="close">X</button>
+        </div>
+      </div>
+      <iframe src="https://www.bing.com/search?q=hello"></iframe>       
+      <div class="resize-handle"></div>
+    </div>
+
+    <!-- Window for Video Player -->
+    <div class="window" id="video-window">
+      <div class="window-header">
+        <span>Video Player</span>
+        <div class="window-buttons">
+          <button class="minimize">―</button>
+          <button class="maximize">[]</button>
+          <button class="close">X</button>
+        </div>
+      </div>
+      <iframe src="Video"></iframe>
+      <div class="resize-handle"></div>
+    </div>
+
+    <!-- Window for VS Code -->
+    <div class="window" id="vscode-window">
+      <div class="window-header">
+        <span>VS Code</span>
+        <div class="window-buttons">
+          <button class="minimize">―</button>
+          <button class="maximize">[]</button>
+          <button class="close">X</button>
+        </div>
+      </div>
+      <iframe src="VS_Code"></iframe>
+      <div class="resize-handle"></div>
+    </div>
+
+    <!-- Window for Command Prompt -->
+    <div class="window" id="cmd-window">
+      <div class="window-header">
+        <span>Command Prompt</span>
+        <div class="window-buttons">
+          <button class="minimize">―</button>
+          <button class="maximize">[]</button>
+          <button class="close">X</button>
+        </div>
+      </div>
+      <iframe src="Cmd"></iframe>
+      <div class="resize-handle"></div>
+    </div>
+
+    <!-- Window for Scratch -->
+    <div class="window" id="scratch-window">
+      <div class="window-header">
+        <span>Scratch</span>
+        <div class="window-buttons">
+          <button class="minimize">―</button>
+          <button class="maximize">[]</button>
+          <button class="close">X</button>
+        </div>
+      </div>
+      <iframe src="https://www.cocrea.world/"></iframe>
+      <div class="resize-handle"></div>
+    </div>
+  </div>
+
+  <!-- Window for AppMaker -->
+  <div class="window" id="AppMaker-window">
+    <div class="window-header">
+      <span>App Maker</span>
+      <div class="window-buttons">
+        <button class="minimize">―</button>
+        <button class="maximize">[]</button>
+        <button class="close">X</button>
+      </div>
+    </div>
+    <iframe src="python_runner"></iframe>
+    <div class="resize-handle"></div>
+  </div>
+</div>
+
+<!-- Window for Your app -->
+<div class="window" id="YourApp-window">
+  <div class="window-header">
+    <span>Your App</span>
+    <div class="window-buttons">
+      <button class="minimize">―</button>
+      <button class="maximize">[]</button>
+      <button class="close">X</button>
+    </div>
+  </div>
+  <iframe src="python_file"></iframe>
+  <div class="resize-handle"></div>
+  </div>
+</div>
+
+<!-- Window for Your app -->
+<div class="window" id="AppMaker-html-window">
+  <div class="window-header">
+    <span>HTML editor</span>
+    <div class="window-buttons">
+      <button class="minimize">―</button>
+      <button class="maximize">[]</button>
+      <button class="close">X</button>
+    </div>
+  </div>
+  <iframe src="htmlrunner"></iframe>
+  <div class="resize-handle"></div>
+  </div>
+</div>
+
+<script>
+  // Open window functionality
+  const openWindowButtons = document.querySelectorAll('.open-window');
+  openWindowButtons.forEach(button => {
+    button.addEventListener('click', function(event) {
+      event.preventDefault();
+      const windowId = this.getAttribute('data-window');
+      const windowElement = document.getElementById(windowId);
+      if (windowElement) {
+        windowElement.style.display = 'flex'; // Show the window
+      }
+    });
+  });
+
+  // Close, Minimize, Maximize functionality
+  const closeButtons = document.querySelectorAll('.close');
+  const minimizeButtons = document.querySelectorAll('.minimize');
+  const maximizeButtons = document.querySelectorAll('.maximize');
+
+  closeButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const window = this.closest('.window');
+      window.style.display = 'none'; // Hide the window
+    });
+  });
+
+  minimizeButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const window = this.closest('.window');
+      window.style.display = 'none'; // Minimize the window (hide)
+    });
+  });
+
+  maximizeButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const window = this.closest('.window');
+      if (window.style.width === '100vw') {
+        window.style.width = '300px'; // Restore window size
+        window.style.height = '300px';
+      } else {
+        // Maximize window but ensure it stays within the viewport
+        window.style.width = window.parentElement.offsetWidth + 'px';
+        window.style.height = window.parentElement.offsetHeight + 'px';
+      }
+    });
+  });
+
+  // Move window functionality with bounds checking
+  const windows = document.querySelectorAll('.window');
+  windows.forEach(window => {
+    const header = window.querySelector('.window-header');
+    let isDragging = false;
+    let offsetX, offsetY;
+
+    header.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      offsetX = e.clientX - window.getBoundingClientRect().left;
+      offsetY = e.clientY - window.getBoundingClientRect().top;
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (isDragging) {
+        const x = e.clientX - offsetX;
+        const y = e.clientY - offsetY;
+
+        // Ensure the window stays within the viewport
+        const maxX = window.parentElement.offsetWidth - window.offsetWidth;
+        const maxY = window.parentElement.offsetHeight - window.offsetHeight;
+
+        window.style.left = Math.min(Math.max(x, 0), maxX) + "px";
+        window.style.top = Math.min(Math.max(y, 0), maxY) + "px";
+      }
+    });
+
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+  });
+
+  // Resize functionality
+  const resizeHandles = document.querySelectorAll('.resize-handle');
+  resizeHandles.forEach(handle => {
+    handle.addEventListener('mousedown', function(e) {
+      const window = this.closest('.window');
+      let startX = e.clientX;
+      let startY = e.clientY;
+      let startWidth = window.offsetWidth;
+      let startHeight = window.offsetHeight;
+
+      function onMouseMove(e) {
+        const diffX = e.clientX - startX;
+        const diffY = e.clientY - startY;
+
+        window.style.width = (startWidth + diffX) + "px";
+        window.style.height = (startHeight + diffY) + "px";
+      }
+
+      function onMouseUp() {
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+      }
+
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    });
+  });
+</script>
+</body>
+</html>

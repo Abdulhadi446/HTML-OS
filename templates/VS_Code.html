@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VS Code</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #000000;
+            color: #ffffff;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 200px;
+            background-color: #252526;
+            padding: 10px;
+        }
+
+        .sidebar h2 {
+            color: #ffffff;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sidebar li {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        .sidebar li:hover {
+            background-color: #333333;
+        }
+
+        .editor {
+            flex-grow: 1;
+            background-color: #000000;
+            color: #ffffff;
+            padding: 20px;
+            overflow: auto;
+            width: 90%;
+        }
+
+        .editor h2 {
+            margin: 0;
+        }
+
+        #editor-content {
+            white-space: pre-wrap;
+            width: 90%;
+            height: 90%;
+            overflow: auto;
+            border: 1px solid #cccccc;
+            padding: 10px;
+            resize: none;
+            font-family: monospace;
+            background-color: #1e1e1e;
+            color: white;
+        }
+
+        .button {
+            padding: 10px;
+            background-color: #0078d4;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .button:hover {
+            background-color: #005fa3;
+        }
+
+        #save-options {
+            margin-top: 10px;
+        }
+    </style>
+    <!-- Add JSZip library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2>Explorer</h2>
+            <ul id="file-list">
+                <li onclick="openFile('index.html')">index.html</li>
+                <li onclick="openFile('script.js')">script.js</li>
+                <li onclick="openFile('styles.css')">styles.css</li>
+                <li onclick="createNewFile()">New File</li>
+            </ul>
+        </div>
+        <div class="editor" id="editor">
+            <h2>Editor</h2>
+            <textarea id="editor-content" placeholder="Select a file to edit..."></textarea>
+            <button class="button" onclick="saveFile()">Save File</button>
+            <div id="save-options">
+                <button class="button" onclick="saveSingleFile()">Save Single File to Disk</button>
+                <button class="button" onclick="saveAllAsZip()">Save All Files as ZIP</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        const fileContents = {
+            'index.html': '<!DOCTYPE html>\n<html>\n<head>\n    <title>My Page</title>\n</head>\n<body>\n    <h1>Hello, World!</h1>\n</body>\n</html>',
+            'script.js': 'console.log("Hello, World!");',
+            'styles.css': 'body {\n    background-color: #fff;\n    color: #000;\n}'
+        };
+
+        let currentFileName = '';
+
+        function openFile(fileName) {
+            const editorContent = document.getElementById('editor-content');
+            currentFileName = fileName;
+            editorContent.value = fileContents[fileName] || 'File not found.';
+            editorContent.focus(); // Set focus to the textarea for immediate typing
+        }
+
+        function saveFile() {
+            const editorContent = document.getElementById('editor-content');
+            if (currentFileName) {
+                fileContents[currentFileName] = editorContent.value;
+                alert(currentFileName + ' has been saved!');
+            } else {
+                alert('No file selected!');
+            }
+        }
+
+        function saveSingleFile() {
+            if (currentFileName) {
+                const content = fileContents[currentFileName] || '';
+                const blob = new Blob([content], { type: 'text/plain' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = currentFileName;
+                link.click();
+            } else {
+                alert('No file selected!');
+            }
+        }
+
+        function saveAllAsZip() {
+            const zip = new JSZip();
+            Object.keys(fileContents).forEach((fileName) => {
+                zip.file(fileName, fileContents[fileName]);
+            });
+
+            zip.generateAsync({ type: 'blob' }).then((content) => {
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(content);
+                link.download = 'all-files.zip';
+                link.click();
+            });
+        }
+
+        function createNewFile() {
+            const fileName = prompt('Enter the name of the new file (e.g., newfile.html):');
+            if (fileName) {
+                fileContents[fileName] = '';
+                const newFileItem = document.createElement('li');
+                newFileItem.innerText = fileName;
+                newFileItem.onclick = () => openFile(fileName);
+                document.getElementById('file-list').appendChild(newFileItem);
+                openFile(fileName);
+            }
+        }
+    </script>
+</body>
+</html>

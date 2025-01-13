@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Viewer</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        video {
+            width: 80%; /* Adjusts the width of the video */
+            max-width: 600px; /* Maximum width of the video */
+            margin-top: 20px; /* Space between input and video */
+        }
+    </style>
+</head>
+<body>
+    <h1>Video Viewer</h1>
+    <input type="file" id="videoInput" accept="video/*">
+    <video id="videoPlayer" controls>
+        Your browser does not support the video tag.
+    </video>
+
+    <script>
+        const videoInput = document.getElementById('videoInput');
+        const videoPlayer = document.getElementById('videoPlayer');
+
+        videoInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const fileURL = URL.createObjectURL(file);
+                videoPlayer.src = fileURL;
+                videoPlayer.play(); // Optional: Play the video automatically upon selection
+            }
+        });
+    </script>
+</body>
+</html>

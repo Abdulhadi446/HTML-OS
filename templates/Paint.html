@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<!-- saved from url=(0047)https://windowshtml.netlify.app/templates/paint -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Paint App</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        #toolbar {
+            margin-bottom: 10px;
+        }
+
+        canvas {
+            border: 1px solid #000;
+            cursor: crosshair;
+        }
+    </style>
+</head>
+<body>
+    <div id="toolbar">
+        <input type="color" id="colorPicker" value="#000000">
+        <button id="clearBtn">Clear</button>
+    </div>
+    <canvas id="paintCanvas" width="1232" height="543"></canvas>
+
+    <script>
+        const canvas = document.getElementById('paintCanvas');
+        const ctx = canvas.getContext('2d');
+        const colorPicker = document.getElementById('colorPicker');
+        const clearBtn = document.getElementById('clearBtn');
+
+        canvas.width = window.innerWidth - 40; // Adjust width
+        canvas.height = window.innerHeight - 100; // Adjust height
+
+        let painting = false;
+
+        function startPosition(e) {
+            painting = true;
+            draw(e);
+        }
+
+        function endPosition() {
+            painting = false;
+            ctx.beginPath(); // Begin a new path to prevent connecting lines
+        }
+
+        function draw(e) {
+            if (!painting) return;
+
+            ctx.lineWidth = 5; // Set line width
+            ctx.lineCap = 'round'; // Rounded ends for the line
+            ctx.strokeStyle = colorPicker.value; // Set stroke color from color picker
+
+            ctx.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+        }
+
+        // Event Listeners for mouse actions
+        canvas.addEventListener('mousedown', startPosition);
+        canvas.addEventListener('mouseup', endPosition);
+        canvas.addEventListener('mousemove', draw);
+
+        // Clear button functionality
+        clearBtn.addEventListener('click', () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        });
+    </script>
+
+
+</body></html>
